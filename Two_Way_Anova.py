@@ -79,24 +79,57 @@ def quadratic_sum_resolution(input_data):
     for i in range(r):
         for j in range(s):
             SAXB = SAXB + t[i][j] * (mean_x_ab[i][j] -  mean_x_a[i] - mean_x_b[j] + mean_x) ** 2
+    
+    if t[0][0] == 1:
+    #
+    # single test
+      SE = SAXB
+      SAXB = None
+      
     return ST, SA, SB, SAXB, SE, r, s, t[0][0], n
 
 def region_of_rejection(SA, SB, SAXB, SE, r, s, t, alpha):
-    test_FA = (SA / (r - 1)) / (SE / (r*s*(t - 1)))
-    F_A = f.isf(alpha, r - 1, r * s * (t - 1))
+
+    if t > 1:
+    #
+    # repeated test
+    #
+      test_FA = (SA / (r - 1)) / (SE / (r*s*(t - 1)))
+      F_A = f.isf(alpha, r - 1, r * s * (t - 1))
+   
+      test_FB = (SB / (s - 1)) / (SE / (r*s*(t - 1)))
+      F_B = f.isf(alpha, r - 1, r * s * (t - 1))
     
-    test_FB = (SB / (s - 1)) / (SE / (r*s*(t - 1)))
-    F_B = f.isf(alpha, r - 1, r * s * (t - 1))
-    
-    test_FAXB = (SAXB / ((r - 1)*(s - 1))) / (SE / (r*s*(t - 1)))
-    F_AXB = f.isf(alpha, (r - 1)*(s - 1) , r * s * (t - 1))
-    
+      test_FAXB = (SAXB / ((r - 1)*(s - 1))) / (SE / (r*s*(t - 1)))
+      F_AXB = f.isf(alpha, (r - 1)*(s - 1) , r * s * (t - 1))
+    elif t == 1:
+    #
+    # single test
+    #
+      test_FA = (SA / (r - 1))/ ((SE / ((r - 1)*(s - 1))))
+      F_A = f.isf(alpha, r - 1, (r - 1)*(s - 1))
+
+      test_FB = (SB / (s - 1))/ ((SE / ((r - 1)*(s - 1))))
+      F_B = f.isf(alpha, s - 1, (r - 1)*(s - 1))    
+      
+      test_FAXB = None
+      F_AXB = None
+    else:
+      test_FA = None
+      F_A = None
+      test_FB = None
+      F_B = None
+      test_FAXB = None
+      F_AXB = None
+      
     return test_FA, F_A, determine_rejection(test_FA, F_A), \
            test_FB, F_B, determine_rejection(test_FB, F_B), \
            test_FAXB, F_AXB, determine_rejection(test_FAXB, F_AXB)
 
 def determine_rejection(test_value, F_value):
-    if test_value >= F_value:
+    if ((test_value == None) or (F_value == None)):
+       reject_ind = None
+    elif test_value >= F_value:
        reject_ind = True
     else:
        reject_ind = False
