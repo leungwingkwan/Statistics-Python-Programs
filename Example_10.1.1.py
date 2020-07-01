@@ -1,37 +1,20 @@
-import random
+import bootstrap as BS
 import numpy as np
-import math
 
-def bootstrap_sampling(data, n, B):
+data = [18.2, 9.5, 12.0, 21.1, 10.2]
 
-    return_list = []
-    data_len = len(data)
-    for i in range(B):
-        sample_list = []
-        for j in range(n):
-            rnd = int(random.random() * data_len)
-            sample_list.append(data[rnd])
-        return_list.append(sample_list)
-    return return_list
+bs = BS.bootstrap(data, np.median)
+print('bs.theta =', bs.theta)
+bs.sampling(5, 10, np.median)
+print('bs.bootstrap_sample =', bs.bootstrap_sample)
+print('mean of bs.bootstrap_sample =', np.mean(bs.bootstrap_sample[0]))
+print('sigma = ', bs.sample_standard_deviation(bs.bootstrap_sample[0]))
 
-sample_data = [18.2, 9.5, 12.0, 21.1, 10.2]
-
-n = 5
-B = 10
-
-
-sampling_list = bootstrap_sampling(sample_data, n, B)
-theta_list = []
-for item in sampling_list:
-    median_theta = np.median(item)
-    theta_list.append(median_theta)
-    print(item, ':', median_theta)
-    
-theta_median = np.median(sample_data)
-sigma = 0
-for item in theta_list:
-    sigma = sigma + (item - theta_median) ** 2
-sigma = math.sqrt(sigma / (len(theta_list) - 1))
-print('sigma = ', sigma)
-
-
+# Verify example 1 data
+print('===============example 1 sample data=====================')
+theta_star = [12.0, 12.0, 10.2, 12.0, 18.2, 10.2, 12.0, 18.2, 18.2, 10.2]
+print('theta_star_median =', np.median(theta_star))
+print('theta_start_mean =', np.mean(theta_star))
+theta_star_sigma = (np.var(theta_star, ddof=1)) ** 0.5
+print('theta_star_sigma = ', theta_star_sigma)
+print('It\'s proven, theta_start_mean is used in deviation of theta')

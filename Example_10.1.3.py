@@ -9,4 +9,4 @@ bs = BS.bootstrap(data, np.median)
 print('bs.theta =', bs.theta)
 bs.sampling(len(data), 10000, np.median)
 
-print('MSE_of_theta = ', bs.MSE(bs.bootstrap_sample[0], bs.theta))
+print('bias = ', bs.bias(bs.bootstrap_sample[0], bs.theta))
