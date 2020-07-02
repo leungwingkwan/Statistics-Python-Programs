@@ -76,8 +76,8 @@ class bootstrap():
          sample = copy.deepcopy(input_sample)
          
       B = len(sample)
-      k1 = int(B * alpha_left)
-      k2 = int(B * alpha_right)
+      k1 = max(int(B * alpha_left), 0)
+      k2 = int(B * alpha_right) - 1
      
       sample.sort()
       left_margin = sample[k1]
@@ -91,7 +91,7 @@ class bootstrap():
       tmp = copy.deepcopy(sample)
       tmp.sort()
       k1 = max(int(B * kw['left_trim_pct']), 0)
-      k2 = min(int(B * kw['right_trim_pct']) + 1, B)
+      k2 = min(int(B * kw['right_trim_pct']), B)
       tmp_trimmed_mean = np.mean(tmp[k1:k2])
       del tmp
       return tmp_trimmed_mean
