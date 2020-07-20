@@ -93,30 +93,33 @@ print(p_m)
 # Step 2:
 ###################
 print('=======================Step 2=======================')
-print('p = ')
-print(p)
 p_rank = np.linalg.matrix_rank(p)
 #
 # use first 4 lines instead
 #
 p_t = np.transpose(p)
-print('p_t = ')
-print(p_t)
 
 p_1 = np.eye(len(p))
-print('p_1 = ')
-print(p_1)
 p_x = p_t - p_1
-print('p_x = ')
-print(p_x)
 p_x_a = p_x[0:4]
 p_x_a = np.vstack((p_x_a, np.ones(len(p))))
+print('Correct Answer=====================')
 print('p_x_a = ')
 print(p_x_a)
 
 b = [[0], [0], [0], [0], [1]]
-print('b = ')
-print(b)
 x = np.linalg.solve(p_x_a, b)
-print('x =')
+print('b =')
+print(b)
+print('Correct Answer: x =')
 print(x)
+
+print('Inorrect Answer=====================')
+print('p_x =')
+print(p_x)
+b1 = [[0], [0], [0], [0], [0]]
+print('b1 =')
+print(b1)
+x1 = np.linalg.solve(p_x, b1)
+print('inorrect Answer: x1 =')
+print(x1)
